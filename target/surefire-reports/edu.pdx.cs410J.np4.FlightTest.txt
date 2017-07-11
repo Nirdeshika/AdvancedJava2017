@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: edu.pdx.cs410J.np4.FlightTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.009 sec <<< FAILURE! - in edu.pdx.cs410J.np4.FlightTest
+getArrivalStringNeedsToBeImplemented(edu.pdx.cs410J.np4.FlightTest)  Time elapsed: 0.003 sec  <<< ERROR!
+java.lang.Exception: Unexpected exception, expected<java.lang.UnsupportedOperationException> but was<java.lang.NoSuchMethodError>
+	at edu.pdx.cs410J.np4.FlightTest.getArrivalStringNeedsToBeImplemented(FlightTest.java:15)
+
+forProject1ItIsOkayIfGetDepartureTimeReturnsNull(edu.pdx.cs410J.np4.FlightTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.NoSuchMethodError: edu.pdx.cs410J.np4.Flight: method <init>()V not found
+	at edu.pdx.cs410J.np4.FlightTest.forProject1ItIsOkayIfGetDepartureTimeReturnsNull(FlightTest.java:27)
+
+initiallyAllFlightsHaveTheSameNumber(edu.pdx.cs410J.np4.FlightTest)  Time elapsed: 0.003 sec  <<< ERROR!
+java.lang.NoSuchMethodError: edu.pdx.cs410J.np4.Flight: method <init>()V not found
+	at edu.pdx.cs410J.np4.FlightTest.initiallyAllFlightsHaveTheSameNumber(FlightTest.java:21)
+
