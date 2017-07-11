@@ -8,7 +8,7 @@ package edu.pdx.cs410J.np4;
  */
 public class ErroneousNumberOfArgumentsException extends RuntimeException {
     /**
-     * Create an ErroneousNumberOfArgumentsException object with the input message.
+     * Creates an ErroneousNumberOfArgumentsException object with the input message.
      *
      * @param message The message to be displayed when the exception occurs.
      */

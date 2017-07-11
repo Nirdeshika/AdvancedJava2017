@@ -8,7 +8,7 @@ package edu.pdx.cs410J.np4;
  */
 public class IllegalAirportCodeException extends RuntimeException {
     /**
-     * Create an IllegalAirportCodeException object with the input message.
+     * Creates an IllegalAirportCodeException object with the input message.
      *
      * @param message The message to be displayed when the exception occurs.
      */

@@ -9,7 +9,7 @@ package edu.pdx.cs410J.np4;
  */
 public class ErroneousDateTimeFormatException extends RuntimeException {
     /**
-     * Create an ErroneousDateTimeFormatException object with the input message.
+     * Creates an ErroneousDateTimeFormatException object with the input message.
      *
      * @param message The message to be displayed when the exception occurs.
      */
