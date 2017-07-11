@@ -41,7 +41,7 @@ public class Flight extends AbstractFlight {
     private String arrivalTime = null;
 
     /**
-     * Create a flight object with the variables set to their corresponding values
+     * Creates a flight object with the variables set to their corresponding values
      *
      * @param number      Unique identifying number
      * @param source      Source airport's three letter code
