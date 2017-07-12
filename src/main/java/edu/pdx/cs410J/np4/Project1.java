@@ -168,6 +168,12 @@ public class Project1 {
         return options;
     }
 
+    /**
+     * To check if the options are valid. If there are any ivalid options, it throws an exception.
+     *
+     * @param options The options passed via command line
+     * @throws IllegalOptionException
+     */
     private static void checkValidityOfOptions(ArrayList<String> options) {
         if (!Arrays.asList("-README", "-print").containsAll(options)) {
             throw new IllegalOptionException("Please check there is an invalid option. The valid options are -README and -print." +
