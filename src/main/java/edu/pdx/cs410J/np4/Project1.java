@@ -17,8 +17,8 @@ public class Project1 {
     /**
      * <p>
      * The entry point of the project. This method parses the command line arguments and checks for the correct type and format. If any of the
-     * arguments does not match the requirements, the programs throws an exception and exits gracefully. If everything passes, then it sets
-     * the appropriate variables with the given values.
+     * arguments do not match the requirements, the programs throws an exception and exits gracefully. If everything passes, then it sets
+     * the appropriate variables with the given values. It then creates a flight and an airline objects and adds flight to the airline object.
      * </p>
      *
      * @param args It is an array of Strings. It can take any number of Strings. But for the program to work as expected, it should be passed
@@ -123,7 +123,7 @@ public class Project1 {
     }
 
     /**
-     * Returns the flight number after validating it. If it is not a number or if it is a negative integer, it throws an error.
+     * Returns the flight number after validating it. If it is not a positive integer, it throws an error.
      *
      * @param flightNumberAsString The command line argument corresponding to flight number.
      * @return The flight number
@@ -198,7 +198,7 @@ public class Project1 {
         readMe += "Command Line Usage: java edu.pdx.cs410J.np4.Project1 [options] <args>\n" +
                 "args are (in order)\n" +
                 "name : Name of the flight : String\n" +
-                "flightNumber: The flight number: int\n" +
+                "flightNumber: The flight number: positive int\n" +
                 "source: A three letter code of departure airport: String containing only characters\n" +
                 "departDate: Date on which the flight departs: String of the format mm/dd/yyyy (Month or day can one or two digits but year must be 4 digits.\n" +
                 "departTime: Time at which the flight departs: String of HH:mm (Hours can be 1 or digits but minutes should be two digits.\n" +
@@ -262,7 +262,7 @@ public class Project1 {
      * Checks if the input string is of the format HH:mm. Hours can be 1 or 2 digits, but minutes should be 2 digits.
      * It also checks if it is a valid time. If not, it throws an exception.
      *
-     * @param time
+     * @param time  Departure time or Arrival time
      * @throws ErroneousDateTimeFormatException
      */
     private static void checkTimeFormat(String time) {
