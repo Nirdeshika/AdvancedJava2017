@@ -10,7 +10,7 @@ import java.util.Collection;
  * @author Nirdeshika Polisetti
  */
 public class TextDumper implements AirlineDumper<Airline> {
-    private static String SEPARATOR = " || ";
+    private static String SEPARATOR = "||";
     private File file;
 
     public TextDumper(String fileName) {
@@ -35,7 +35,7 @@ public class TextDumper implements AirlineDumper<Airline> {
                         bufferedWriter.write(airline.getName() + "\n");
                 }
                 for (Flight f : flights) {
-                    bufferedWriter.write(f.getNumber() + SEPARATOR + f.getSource() + SEPARATOR + f.getDepartureString() + SEPARATOR + f.getDestination() + SEPARATOR + f.getArrivalString()+"\n");
+                    bufferedWriter.write(f.getNumber() + SEPARATOR + f.getSource() + SEPARATOR + f.getDepartureString() + SEPARATOR + f.getDestination() + SEPARATOR + f.getArrivalString() + "\n");
                 }
 
                 bufferedWriter.close();
@@ -51,7 +51,7 @@ public class TextDumper implements AirlineDumper<Airline> {
         BufferedWriter bufferedWriter = null;
 
         try {
-            fileWriter = new FileWriter(file,true);
+            fileWriter = new FileWriter(file, true);
             bufferedWriter = new BufferedWriter(fileWriter);
         } catch (FileNotFoundException e) {
             checkIfFileExistsElseCreateIt();
@@ -67,7 +67,7 @@ public class TextDumper implements AirlineDumper<Airline> {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                System.out.println("File does not exist and cannot be created. "+ file +" : "+e.getMessage());
+                System.out.println("File does not exist and cannot be created. " + file + " : " + e.getMessage());
                 System.exit(1);
             }
         }
@@ -75,8 +75,13 @@ public class TextDumper implements AirlineDumper<Airline> {
 
     private void checkIfItIsADirectory() {
         if (file.isDirectory()) {
-            System.out.println("A file is expected, but a directory is provided.");
-            System.exit(2);
+            try {
+                throw new FileNotFoundException("A file is expected, but a directory is provided.");
+            } catch (FileNotFoundException fnfe) {
+                System.out.println(fnfe.getMessage());
+                System.exit(2);
+            }
+
         }
     }
 }
