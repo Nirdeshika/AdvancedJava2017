@@ -130,7 +130,7 @@ public class Project1 {
      * @throws NumberFormatException    if the passed argument is not a valid number.
      * @throws IllegalArgumentException if the number is a negative integer.
      */
-    private static int getFlightNumber(String flightNumberAsString) {
+    static int getFlightNumber(String flightNumberAsString) {
         int flightNumber = 0;
         try {
             flightNumber = Integer.parseInt(flightNumberAsString);
@@ -233,7 +233,7 @@ public class Project1 {
      * @param airportCode A String of three lettered code for departure or arrival airport.
      * @throws IllegalAirportCodeException
      */
-    private static void checkAirportCodeFormat(String airportCode) {
+    static void checkAirportCodeFormat(String airportCode) {
         if (!airportCode.matches("[a-zA-z][a-zA-Z][a-zA-Z]"))
             throw new IllegalAirportCodeException("Please check. Not a valid airport code: " + airportCode + ". Airport code should be a three lettered string.");
     }
@@ -245,7 +245,7 @@ public class Project1 {
      * @param date Departure date or Arrival date
      * @throws ErroneousDateTimeFormatException
      */
-    private static void checkDateFormat(String date) {
+     static void checkDateFormat(String date) {
         if (!date.matches("\\d{1,2}/\\d{1,2}/\\d{4}"))
             throw new ErroneousDateTimeFormatException("Please check. Invalid date format: " + date);
 
@@ -265,7 +265,7 @@ public class Project1 {
      * @param time  Departure time or Arrival time
      * @throws ErroneousDateTimeFormatException
      */
-    private static void checkTimeFormat(String time) {
+     static void checkTimeFormat(String time) {
         if (!time.matches("\\d{1,2}:\\d{2}"))
             throw new ErroneousDateTimeFormatException("Please check. Invalid time format: " + time);
 
