@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 public class TextParser implements AirlineParser<Airline> {
     private File file;
     private Airline airline = null;
+    private String airlineName;
 
     private int flightNumber;
     private String source;
@@ -21,26 +22,22 @@ public class TextParser implements AirlineParser<Airline> {
     private String departureString;
     private String arrivalString;
 
+    StringTokenizer stringTokenizer;
+    BufferedReader bufferedReader;
+
     public TextParser(String fileName) {
         this.file = new File(fileName);
     }
 
     @Override
     public Airline parse() throws ParserException {
-
-        StringTokenizer stringTokenizer;
-        BufferedReader bufferedReader;
         checkIfFileExists();
         checkIfItIsAFile();
 
         bufferedReader = getBufferedReader();
         if (bufferedReader != null) {
             try {
-                String airlineName = bufferedReader.readLine();
-                stringTokenizer = getStringTokenizer(airlineName);
-                checkIfItIsInTheCorrectFormat(stringTokenizer, true);
-                airlineName = stringTokenizer.nextToken();
-                airline = new Airline(airlineName);
+                airline = new Airline(getAirlineName());
 
                 String flightObjectDetails;
                 while ((flightObjectDetails = bufferedReader.readLine()) != null) {
@@ -94,6 +91,24 @@ public class TextParser implements AirlineParser<Airline> {
         }
 
         return airline;
+    }
+
+    String getAirlineName() {
+        String airlineName = null;
+        try {
+            airlineName = bufferedReader.readLine();
+            stringTokenizer = getStringTokenizer(airlineName);
+            checkIfItIsInTheCorrectFormat(stringTokenizer, true);
+            airlineName = stringTokenizer.nextToken();
+        } catch (IOException e) {
+            System.out.println("Cannot read from this file. " + e.getMessage());
+            System.exit(6);
+        } catch (IllegalFileFormatException iffe) {
+            System.out.println(iffe.getMessage());
+            System.exit(7);
+        }
+        return airlineName;
+
     }
 
     private void setDateAndTime(String string, boolean isDeparture) {
