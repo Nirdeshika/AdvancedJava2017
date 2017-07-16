@@ -1,11 +1,13 @@
 package edu.pdx.cs410J.np4;
 
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * The main class for the CS410J airline Project.
@@ -13,6 +15,19 @@ import java.util.Locale;
  * @author Nirdeshika Polisetti
  */
 public class Project1 {
+    private String nameOfTheAirLine;
+    private int flightNumber = -1;
+    private String source = null;
+    private String departDate = null;
+    private String departTime = null;
+    private String destination = null;
+    private String arrivalDate = null;
+    private String arrivalTime = null;
+
+    private ArrayList<String> options = null;
+    String nameOfTheFileFromCommandLine;
+    Airline airline;
+    private Flight flight;
 
     /**
      * <p>
@@ -25,23 +40,14 @@ public class Project1 {
      *             zero or more of the these two options: -README and -print and 8 other arguments. For more details, refer
      *             <a href = "http://web.cecs.pdx.edu/~whitlock/pdf/AppClasses.pdf">Project1 Details</a>
      */
-    public static void main(String[] args) {
-        String nameOfTheAirLine;
-        int flightNumber = -1;
-        String source = null;
-        String departDate = null;
-        String departTime = null;
-        String destination = null;
-        String arrivalDate = null;
-        String arrivalTime = null;
-
+    void processCommandLineArguments(String[] args) {
         int countOfArgs = args.length;
-        ArrayList<String> options = getOptionalArguments(args, countOfArgs);
+        options = getOptionalArguments(args, countOfArgs);
         int numberOfOptions = options.size();
 
         if (options.contains("-README")) {
             System.out.println(getReadMe());
-            return;
+            System.exit(0);
         }
 
         if (numberOfOptions != 0) {
@@ -111,8 +117,8 @@ public class Project1 {
             System.exit(8);
         }
 
-        Airline airline = new Airline(nameOfTheAirLine);
-        Flight flight = new Flight(flightNumber, source, destination, departDate, departTime, arrivalDate, arrivalTime);
+        airline = new Airline(nameOfTheAirLine);
+        flight = new Flight(flightNumber, source, destination, departDate, departTime, arrivalDate, arrivalTime);
         airline.addFlight(flight);
 
         if (options.contains("-print")) {
@@ -153,19 +159,52 @@ public class Project1 {
      * @param args        The command line arguments passed to main method
      * @param countOfArgs Count of number of command line arguments.
      * @return A list of Strings containing the options.
-     * @see edu.pdx.cs410J.np4.Project1#main(String[])
+     * @see edu.pdx.cs410J.np4.Project1#processCommandLineArguments(String[])
      */
-    private static ArrayList<String> getOptionalArguments(String[] args, int countOfArgs) {
+    private ArrayList<String> getOptionalArguments(String[] args, int countOfArgs) {
         ArrayList<String> options = new ArrayList<>();
 
         if (countOfArgs > 0 && args[0].charAt(0) == '-') {
             options.add(args[0]);
         }
-        if (countOfArgs > 1 && args[1].charAt(0) == '-') {
-            options.add(args[1]);
+
+        if (countOfArgs > 1) {
+            if (args[1].charAt(0) == '-')
+                options.add(args[1]);
+            else if (args[0].equals("-textFile")) {
+                options.add(args[1]);
+                nameOfTheFileFromCommandLine = args[1];
+            }
+        }
+
+        if (countOfArgs > 2) {
+            if (args[2].charAt(0) == '-')
+                options.add(args[2]);
+            else if (args[1].equals("-textFile")) {
+                options.add(args[2]);
+                nameOfTheFileFromCommandLine = args[2];
+            }
+        }
+
+        if (countOfArgs > 3) {
+            if (args[3].charAt(0) == '-')
+                options.add(args[3]);
+            else if (args[2].equals("-textFile")) {
+                options.add(args[3]);
+                nameOfTheFileFromCommandLine = args[3];
+            }
         }
 
         return options;
+    }
+
+    private void extractTextFileNameFromCommandLine(String option) {
+        StringTokenizer stringTokenizer = new StringTokenizer(option, " ");
+        if (stringTokenizer.countTokens() != 2) {
+            throw new IllegalOptionException("Please check. There is an error in the textFile option.");
+        }
+        stringTokenizer.nextToken();
+        nameOfTheFileFromCommandLine = stringTokenizer.nextToken();
     }
 
     /**
@@ -175,11 +214,13 @@ public class Project1 {
      * @throws IllegalOptionException
      */
     private static void checkValidityOfOptions(ArrayList<String> options) {
-        if (!Arrays.asList("-README", "-print").containsAll(options)) {
-            throw new IllegalOptionException("Please check there is an invalid option. The valid options are -README and -print." +
+        int indexOfFileOption = options.indexOf("-textFile");
+        String name = options.remove(indexOfFileOption + 1);
+        if (!Arrays.asList("-README", "-print", "-textFile").containsAll(options)) {
+            throw new IllegalOptionException("Please check there is an invalid option. The valid options are -README, -textFile and -print." +
                     "Note that these are case sensitive.");
         }
-
+        options.add(indexOfFileOption + 1, name);
     }
 
     /**
@@ -245,7 +286,7 @@ public class Project1 {
      * @param date Departure date or Arrival date
      * @throws ErroneousDateTimeFormatException
      */
-     static void checkDateFormat(String date) {
+    static void checkDateFormat(String date) {
         if (!date.matches("\\d{1,2}/\\d{1,2}/\\d{4}"))
             throw new ErroneousDateTimeFormatException("Please check. Invalid date format: " + date);
 
@@ -262,10 +303,10 @@ public class Project1 {
      * Checks if the input string is of the format HH:mm. Hours can be 1 or 2 digits, but minutes should be 2 digits.
      * It also checks if it is a valid time. If not, it throws an exception.
      *
-     * @param time  Departure time or Arrival time
+     * @param time Departure time or Arrival time
      * @throws ErroneousDateTimeFormatException
      */
-     static void checkTimeFormat(String time) {
+    static void checkTimeFormat(String time) {
         if (!time.matches("\\d{1,2}:\\d{2}"))
             throw new ErroneousDateTimeFormatException("Please check. Invalid time format: " + time);
 
@@ -276,6 +317,35 @@ public class Project1 {
         } catch (ParseException e) {
             throw new ErroneousDateTimeFormatException("Please check. Invalid time: " + time);
         }
+    }
+
+    String getAirlineNameFromTextFile() {
+        String nameOfTheAirlineInTheTextFile = null;
+        File file = new File(nameOfTheFileFromCommandLine);
+        if (file.exists() && !file.isDirectory()) {
+            FileReader fileReader;
+            try {
+                fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                nameOfTheAirlineInTheTextFile = bufferedReader.readLine();
+            } catch (FileNotFoundException e) {
+                System.out.println("Error while reading the name of the airline from text file:" + file + " " + e.getMessage());
+                System.exit(10);
+            } catch (IOException e) {
+                System.out.println("Error while reading the name of the airline from text file:" + file + " " + e.getMessage());
+                System.exit(10);
+            }
+        }
+        return nameOfTheAirlineInTheTextFile;
+    }
+
+    void checkIfAirlineNameInTextFileIsSameAsTheOneGivenInTheCommandLine() {
+        String nameOftheAirlineFromTextFile = getAirlineNameFromTextFile();
+        if (!nameOftheAirlineFromTextFile.equals(nameOfTheAirLine)) {
+            throw new AirlineNameMismatchException("Name of the airline from the text file:" + nameOftheAirlineFromTextFile + " does not match with the name of the airline " +
+                    "given in the command line:" + nameOfTheAirLine);
+        }
+
     }
 
 }
