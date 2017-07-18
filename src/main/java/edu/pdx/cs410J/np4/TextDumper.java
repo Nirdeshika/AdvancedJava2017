@@ -25,7 +25,7 @@ public class TextDumper implements AirlineDumper<Airline> {
     /**
      * Creates a TextDumper object. It writes the details of the airline to the file given in the argument.
      *
-     * @param fileName
+     * @param fileName Name of the file to which the content are written to.
      */
     public TextDumper(String fileName) {
         this.file = new File(fileName);
