@@ -7,16 +7,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * A class that implements AirlineDumper with methods to write the details of the Airline (name + its flights) to a text file.
+ *
  * @author Nirdeshika Polisetti
  */
 public class TextDumper implements AirlineDumper<Airline> {
-    private static String SEPARATOR = "||";
+    /**
+     * The delimiter to be used the text file.
+     */
+    private static final String SEPARATOR = "||";
+
+    /**
+     * The file into which the details of the Airline are to be written.
+     */
     private File file;
 
+    /**
+     * Creates a TextDumper object. It writes the details of the airline to the file given in the argument.
+     *
+     * @param fileName
+     */
     public TextDumper(String fileName) {
         this.file = new File(fileName);
     }
 
+    /**
+     * It checks if the file exists; if it doesn't, then it creates one and writes to it.
+     * If it does, it checks if it is a directory. If it is, then it exits gracefully with an error message.
+     * Else, it writes to it. If any of the subdirectories do not exists, then the program exits with an error messge.
+     *
+     * @param airline The airline whose details are to be written in the text file.
+     */
     @Override
     public void dump(Airline airline) {
         BufferedWriter bufferedWriter;
@@ -46,6 +67,11 @@ public class TextDumper implements AirlineDumper<Airline> {
         }
     }
 
+    /**
+     * Gives the BufferedWriter object which aids in writing to the text file.
+     *
+     * @return BufferedWriter object wrapped around FileWriter whose append mode is on.
+     */
     private BufferedWriter getBufferedWriter() {
         FileWriter fileWriter;
         BufferedWriter bufferedWriter = null;
@@ -62,6 +88,9 @@ public class TextDumper implements AirlineDumper<Airline> {
         return bufferedWriter;
     }
 
+    /**
+     * Checks if the file exists. If it does not exists, it creates a new file.
+     */
     private void checkIfFileExistsElseCreateIt() {
         if (!file.exists()) {
             try {
@@ -73,6 +102,10 @@ public class TextDumper implements AirlineDumper<Airline> {
         }
     }
 
+    /**
+     * Checks if it is a directory.
+     *
+     */
     private void checkIfItIsADirectory() {
         if (file.isDirectory()) {
             try {
