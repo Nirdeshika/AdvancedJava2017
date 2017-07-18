@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
- * The main class for the CS410J airline Project.
+ * The helper class for the CS410J airline Project.
  *
  * @author Nirdeshika Polisetti
  */
@@ -31,18 +31,23 @@ public class Project1 {
 
     /**
      * <p>
-     * The entry point of the project. This method parses the command line arguments and checks for the correct type and format. If any of the
-     * arguments do not match the requirements, the programs throws an exception and exits gracefully. If everything passes, then it sets
-     * the appropriate variables with the given values. It then creates a flight and an airline objects and adds flight to the airline object.
+     * This method parses the command line arguments and checks for the correct type and format. If any of the
+     * arguments do not match the requirements, the program exits gracefully with appropriate error message. If everything passes, then it sets
+     * the appropriate variables with the given values.
      * </p>
      *
-     * @param args It is an array of Strings. It can take any number of Strings. But for the program to work as expected, it should be passed
-     *             zero or more of the these two options: -README and -print and 8 other arguments. For more details, refer
-     *             <a href = "http://web.cecs.pdx.edu/~whitlock/pdf/AppClasses.pdf">Project1 Details</a>
+     * @param args The commandline arguments
      */
     void processCommandLineArguments(String[] args) {
         int countOfArgs = args.length;
-        options = getOptionalArguments(args, countOfArgs);
+        try{
+            options = getOptionalArguments(args, countOfArgs);
+        }
+        catch (IllegalOptionException ioe)
+        {
+            System.out.println(ioe.getMessage());
+            System.exit(9);
+        }
         int numberOfOptions = options.size();
 
         if (options.contains("-README")) {
@@ -67,7 +72,12 @@ public class Project1 {
         }
 
         nameOfTheAirLine = args[0 + numberOfOptions];
-        flightNumber = getFlightNumber(args[1 + numberOfOptions]);
+        try {
+            flightNumber = getFlightNumber(args[1 + numberOfOptions]);
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
+            System.exit(2);
+        }
 
         try {
             checkAirportCodeFormat(args[2 + numberOfOptions]);
@@ -133,8 +143,7 @@ public class Project1 {
      *
      * @param flightNumberAsString The command line argument corresponding to flight number.
      * @return The flight number
-     * @throws NumberFormatException    if the passed argument is not a valid number.
-     * @throws IllegalArgumentException if the number is a negative integer.
+     * @throws IllegalArgumentException if the number is a negative integer or not a number at all.
      */
     static int getFlightNumber(String flightNumberAsString) {
         int flightNumber = 0;
@@ -144,11 +153,9 @@ public class Project1 {
                 throw new IllegalArgumentException("Invalid flight number. Flight number should be a positive number.");
             }
         } catch (NumberFormatException nfe) {
-            System.out.println("Invalid number: " + flightNumberAsString + ". Flight number should be a positive integer.");
-            System.exit(2);
+            throw new IllegalArgumentException("Invalid number: " + flightNumberAsString + ". Flight number should be a positive integer.");
         } catch (IllegalArgumentException iae) {
-            System.out.println(iae.getMessage());
-            System.exit(2);
+            throw new IllegalArgumentException(iae.getMessage());
         }
         return flightNumber;
     }
@@ -159,6 +166,7 @@ public class Project1 {
      * @param args        The command line arguments passed to main method
      * @param countOfArgs Count of number of command line arguments.
      * @return A list of Strings containing the options.
+     * @throws IllegalOptionException When -textFile option is followed by an option instead of a file name.
      * @see edu.pdx.cs410J.np4.Project1#processCommandLineArguments(String[])
      */
     private ArrayList<String> getOptionalArguments(String[] args, int countOfArgs) {
@@ -169,16 +177,20 @@ public class Project1 {
         }
 
         if (countOfArgs > 1) {
-            if (args[1].charAt(0) == '-')
+            if (args[0].equals("-textFile") && args[1].charAt(0) == '-') {
+                throw new IllegalOptionException("-textFile option should be followed by a fileName.");
+            } else if (args[1].charAt(0) == '-') {
                 options.add(args[1]);
-            else if (args[0].equals("-textFile")) {
+            } else if (args[0].equals("-textFile")) {
                 options.add(args[1]);
                 nameOfTheFileFromCommandLine = args[1];
             }
         }
 
         if (countOfArgs > 2) {
-            if (args[2].charAt(0) == '-')
+            if (args[1].equals("-textFile") && args[2].charAt(0) == '-') {
+                throw new IllegalOptionException("-textFile option should be followed by a fileName.");
+            } else if (args[2].charAt(0) == '-')
                 options.add(args[2]);
             else if (args[1].equals("-textFile")) {
                 options.add(args[2]);
@@ -186,7 +198,8 @@ public class Project1 {
             }
         }
 
-        if (countOfArgs > 3) {
+        if (countOfArgs > 3)
+        {
             if (args[3].charAt(0) == '-')
                 options.add(args[3]);
             else if (args[2].equals("-textFile")) {
@@ -198,29 +211,32 @@ public class Project1 {
         return options;
     }
 
-    private void extractTextFileNameFromCommandLine(String option) {
-        StringTokenizer stringTokenizer = new StringTokenizer(option, " ");
-        if (stringTokenizer.countTokens() != 2) {
-            throw new IllegalOptionException("Please check. There is an error in the textFile option.");
-        }
-        stringTokenizer.nextToken();
-        nameOfTheFileFromCommandLine = stringTokenizer.nextToken();
-    }
+//    private void extractTextFileNameFromCommandLine(String option) {
+//        StringTokenizer stringTokenizer = new StringTokenizer(option, " ");
+//        if (stringTokenizer.countTokens() != 2) {
+//            throw new IllegalOptionException("Please check. There is an error in the textFile option.");
+//        }
+//        stringTokenizer.nextToken();
+//        nameOfTheFileFromCommandLine = stringTokenizer.nextToken();
+//    }
 
     /**
-     * To check if the options are valid. If there are any ivalid options, it throws an exception.
+     * To check if the options are valid. If there are any invalid options, it throws an exception.
      *
      * @param options The options passed via command line
-     * @throws IllegalOptionException
+     * @throws IllegalOptionException if it contains any option not listed.
      */
     private static void checkValidityOfOptions(ArrayList<String> options) {
         int indexOfFileOption = options.indexOf("-textFile");
-        String name = options.remove(indexOfFileOption + 1);
+        String name = null;
+        if (indexOfFileOption != -1)
+            name = options.remove(indexOfFileOption + 1);
         if (!Arrays.asList("-README", "-print", "-textFile").containsAll(options)) {
             throw new IllegalOptionException("Please check there is an invalid option. The valid options are -README, -textFile and -print." +
                     "Note that these are case sensitive.");
         }
-        options.add(indexOfFileOption + 1, name);
+        if (indexOfFileOption != -1)
+            options.add(indexOfFileOption + 1, name);
     }
 
     /**
@@ -230,12 +246,13 @@ public class Project1 {
      */
     private static String getReadMe() {
         String readMe = "Name: Nirdeshika Polisetti\n";
-        readMe += "Name of the assignment: Project 1\n";
+        readMe += "Name of the assignment: Project 2\n";
         readMe += "Purpose of the project: This project parses command line arguments to check for the validity of the values. " +
                 "If everything is of correct format and type, it creates an airline object and a flight object with the passed in arguments. " +
                 "It further adds the flight object to the airline object.\n" +
-                "This project also takes two options: -README which prints a brief description of what the project does.\n" +
-                "\t\t\t\t     -print: Prints the details of the flight.\nNote that these are case-sensitive.";
+                "This project also takes three options: -README which prints a brief description of what the project does.\n" +
+                "\t\t\t\t\t-print: Prints the details of the flight.\n" +
+                "\t\t\t\t\t-textFile file: Adds the details of the airline and flight to the given file.\n";
         readMe += "Command Line Usage: java edu.pdx.cs410J.np4.Project1 [options] <args>\n" +
                 "args are (in order)\n" +
                 "name : Name of the flight : String\n" +
@@ -248,7 +265,10 @@ public class Project1 {
                 "arrivalTime: Time at which the flight arrives: String of HH:mm (Hours can be 1 or digits but minutes should be two digits.\n\n";
         readMe += "Note: \nIf the String contains a space, it should be enclosed in double quotes.\nDate Strings should also be enclosed in double quotes.\n" +
                 "Options should precede args.\nIf the options contains -README, the program prints a brief description of the project and exits. " +
-                "It will not do anything else. Even error checking.\nFor this project, we can add only one flight to the airline.";
+                "It will not do anything else. Even error checking.\nFor this project, we can add only one flight to the airline.\n" +
+                "The -textFile option checks if the file given exists; if it doesn't, then it creates a new file and add the details of the airline and its flights to the file.\n" +
+                "If the file exists, it checks if the name of the airline in the command line and the file matches; if it does, then adds the details, else exits gracefully with error message.\n" +
+                "The file name should not be a directory. It creates a new file only if all the subdirectories in the path exists. It will not create subdirectories.";
 
 
         return readMe;
@@ -319,6 +339,12 @@ public class Project1 {
         }
     }
 
+    /**
+     * Returns the name of the airline from the text file passed via commandline. It exits with error message if the file doesn't exists or
+     * if there is an error while reading the file.
+     *
+     * @return The name of the airline as given in the text file.
+     */
     String getAirlineNameFromTextFile() {
         String nameOfTheAirlineInTheTextFile = null;
         File file = new File(nameOfTheFileFromCommandLine);
@@ -339,6 +365,11 @@ public class Project1 {
         return nameOfTheAirlineInTheTextFile;
     }
 
+    /**
+     * Checks if the name of the airline given in the command line matches with the airline name in the textfile provided.
+     *
+     * @throws AirlineNameMismatchException
+     */
     void checkIfAirlineNameInTextFileIsSameAsTheOneGivenInTheCommandLine() {
         String nameOftheAirlineFromTextFile = getAirlineNameFromTextFile();
         if (!nameOftheAirlineFromTextFile.equals(nameOfTheAirLine)) {
