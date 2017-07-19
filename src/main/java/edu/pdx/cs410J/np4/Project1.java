@@ -39,6 +39,11 @@ public class Project1 {
      * @param args The commandline arguments
      */
     void processCommandLineArguments(String[] args) {
+        if (Arrays.asList(args).contains("-README")) {
+            System.out.println(getReadMe());
+            System.exit(0);
+        }
+
         int countOfArgs = args.length;
         try{
             options = getOptionalArguments(args, countOfArgs);
@@ -50,10 +55,6 @@ public class Project1 {
         }
         int numberOfOptions = options.size();
 
-        if (options.contains("-README")) {
-            System.out.println(getReadMe());
-            System.exit(0);
-        }
 
         if (numberOfOptions != 0) {
             try {
@@ -266,6 +267,7 @@ public class Project1 {
         readMe += "Note: \nIf the String contains a space, it should be enclosed in double quotes.\nDate Strings should also be enclosed in double quotes.\n" +
                 "Options should precede args.\nIf the options contains -README, the program prints a brief description of the project and exits. " +
                 "It will not do anything else. Even error checking.\nFor this project, we can add only one flight to the airline.\n" +
+                "The -textFile option should be followed by the file name, it cannot be followed by an option." +
                 "The -textFile option checks if the file given exists; if it doesn't, then it creates a new file and add the details of the airline and its flights to the file.\n" +
                 "If the file exists, it checks if the name of the airline in the command line and the file matches; if it does, then adds the details, else exits gracefully with error message.\n" +
                 "The file name should not be a directory. It creates a new file only if all the subdirectories in the path exists. It will not create subdirectories.";
