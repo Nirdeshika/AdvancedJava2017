@@ -150,7 +150,7 @@ public class TextParser implements AirlineParser<Airline> {
                         try {
                             setDateAndTime(arrivalString, false);
                         } catch (ErroneousDateTimeFormatException iae) {
-                            throw new IllegalFileFormatException("Invalid departure time/date value in the file. " + iae.getMessage());
+                            throw new IllegalFileFormatException("Invalid arrival time/date value in the file. " + iae.getMessage());
                         }
                     } else {
                         throw new IllegalFileFormatException("Format of the file is invalid. Not enough details about flight.");
@@ -212,10 +212,10 @@ public class TextParser implements AirlineParser<Airline> {
             Project1.checkTimeFormat(departTime);
         } else {
             arrivalDate = st.nextToken();
-            Project1.checkDateFormat(departDate);
+            Project1.checkDateFormat(arrivalDate);
 
             arrivalTime = st.nextToken();
-            Project1.checkTimeFormat(departTime);
+            Project1.checkTimeFormat(arrivalTime);
         }
 
     }
