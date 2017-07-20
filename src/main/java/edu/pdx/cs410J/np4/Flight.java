@@ -2,6 +2,9 @@ package edu.pdx.cs410J.np4;
 
 import edu.pdx.cs410J.AbstractFlight;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 /**
  * This class represents a concrete flight class. It has a unique identifying number, a source and a destination airport identified by a three-letter code,
  * a departure date and time, and an arrival date and time.
@@ -24,21 +27,13 @@ public class Flight extends AbstractFlight {
      */
     private String destination = null;
     /**
-     * Departure date
+     * Departure Date time AM/PM
      */
-    private String departDate = null;
+    private Date departTime = null;
     /**
-     * Departure time
+     * Arrival Date Time AM/PM
      */
-    private String departTime = null;
-    /**
-     * Arrival date
-     */
-    private String arrivalDate = null;
-    /**
-     * Arrival time
-     */
-    private String arrivalTime = null;
+    private Date arrivalTime = null;
 
     /**
      * Creates a flight object with the variables set to their corresponding values
@@ -46,18 +41,14 @@ public class Flight extends AbstractFlight {
      * @param number      Unique identifying number
      * @param source      Source airport's three letter code
      * @param destination Destination airport's three letter code
-     * @param departDate  Departure date
      * @param departTime  Departure time
-     * @param arrivalDate Arrival date
      * @param arrivalTime Arrival time
      */
-    public Flight(int number, String source, String destination, String departDate, String departTime, String arrivalDate, String arrivalTime) {
+    public Flight(int number, String source, String destination, Date departTime,  Date arrivalTime) {
         this.number = number;
         this.source = source;
         this.destination = destination;
-        this.departDate = departDate;
         this.departTime = departTime;
-        this.arrivalDate = arrivalDate;
         this.arrivalTime = arrivalTime;
     }
 
@@ -82,13 +73,13 @@ public class Flight extends AbstractFlight {
     }
 
     /**
-     * Concatenates departure date and time.
+     * Returns depart date time am/pm as a String in the format of {@link DateFormat#SHORT}
      *
-     * @return Returns departure date and time as a single string
+     * @return Returns depart date time am/pm as a String
      */
     @Override
     public String getDepartureString() {
-        return departDate + " " + departTime;
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(departTime);
     }
 
     /**
@@ -102,12 +93,28 @@ public class Flight extends AbstractFlight {
     }
 
     /**
-     * Concatenates arrival date and time.
+     * Returns arrival date time am/pm as a String in the format of {@link DateFormat#SHORT}
      *
-     * @return Returns arrival date and time as a single string
+     * @return Returns arrival date time am/pm as a String
      */
     @Override
     public String getArrivalString() {
-        return arrivalDate + " " + arrivalTime;
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(arrivalTime);
+    }
+
+    /**
+     * Returns this flight's departure time as a <code>Date</code>.
+     */
+    @Override
+    public Date getDeparture() {
+        return departTime;
+    }
+
+    /**
+     * Returns this flight's arrival time as a <code>Date</code>.
+     */
+    @Override
+    public Date getArrival() {
+        return arrivalTime;
     }
 }
