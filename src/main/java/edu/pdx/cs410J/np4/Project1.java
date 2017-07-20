@@ -272,7 +272,7 @@ public class Project1 {
                 "The file name should not be a directory. It creates a new file only if all the subdirectories in the path exists. It will not create subdirectories.\n" +
                 "The format of the file is:\n" +
                 "Name of the Airline\n" +
-                "FlightNumber||Source Airport Code||DepartDate DepartTime||Destination||ArrivalDate ArrivalTime";
+                "FlightNumber|Source Airport Code|DepartDate DepartTime|Destination|ArrivalDate ArrivalTime";
 
 
         return readMe;

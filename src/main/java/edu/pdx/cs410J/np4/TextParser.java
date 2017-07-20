@@ -269,7 +269,7 @@ public class TextParser implements AirlineParser<Airline> {
     /**
      * Retuns a StringTokenizer object used to parse the text file.
      * @param string The string that is to be parsed.
-     * @return A StringTokenizer object with delimiter ||
+     * @return A StringTokenizer object with delimiter |
      */
     private StringTokenizer getStringTokenizer(String string) {
         if(string == null)
@@ -277,7 +277,7 @@ public class TextParser implements AirlineParser<Airline> {
             System.out.println("The line to be parsed is null. Please check.");
             System.exit(11);
         }
-        return new StringTokenizer(string, "||");
+        return new StringTokenizer(string, "|");
     }
 
     /**

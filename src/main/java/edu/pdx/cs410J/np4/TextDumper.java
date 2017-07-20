@@ -15,7 +15,7 @@ public class TextDumper implements AirlineDumper<Airline> {
     /**
      * The delimiter to be used the text file.
      */
-    private static final String SEPARATOR = "||";
+    private static final String SEPARATOR = "|";
 
     /**
      * The file into which the details of the Airline are to be written.
