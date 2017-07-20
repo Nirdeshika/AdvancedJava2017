@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 /**
  * The helper class for the CS410J airline Project.
@@ -270,7 +269,10 @@ public class Project1 {
                 "The -textFile option should be followed by the file name, it cannot be followed by an option." +
                 "The -textFile option checks if the file given exists; if it doesn't, then it creates a new file and add the details of the airline and its flights to the file.\n" +
                 "If the file exists, it checks if the name of the airline in the command line and the file matches; if it does, then adds the details, else exits gracefully with error message.\n" +
-                "The file name should not be a directory. It creates a new file only if all the subdirectories in the path exists. It will not create subdirectories.";
+                "The file name should not be a directory. It creates a new file only if all the subdirectories in the path exists. It will not create subdirectories.\n" +
+                "The format of the file is:\n" +
+                "Name of the Airline\n" +
+                "FlightNumber||Source Airport Code||DepartDate DepartTime||Destination||ArrivalDate ArrivalTime";
 
 
         return readMe;
