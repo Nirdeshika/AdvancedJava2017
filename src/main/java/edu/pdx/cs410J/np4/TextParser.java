@@ -4,6 +4,11 @@ import edu.pdx.cs410J.AirlineParser;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 /**
@@ -18,12 +23,6 @@ public class TextParser implements AirlineParser<Airline> {
      * The Airline object whose details the text file contains.
      */
     private Airline airline = null;
-
-    /**
-     * The name of the airline.
-     */
-    private String airlineName;
-
     /**
      * The flight number. Should be a positive integer.
      */
@@ -36,29 +35,23 @@ public class TextParser implements AirlineParser<Airline> {
      * The airport code of destination. It should be a three-lettered string.
      */
     private String destination;
-    /**
-     * The departure date. Should be of the format mm/dd/yyyy. Month and day can contain 1 or 2 numbers. But year should contain 4 digits.
-     */
-    private String departDate;
 
     /**
-     * The departure time. Should be of the format HH:mm. Hours can contain 1 or 2 digits. But minutes should contain 2 digits.
+     * The departure Date time am/pm. Date is of the format mm/dd/yyyy. Time is of the format HH:mm
+     * Month, Date and Hours can be 1 or 2 digits. Year should be 4 digits and
      */
-    private String departTime;
+    private Date departTime;
     /**
-     * The arrival date. Should be of the format mm/dd/yyyy. Month and day can contain 1 or 2 numbers. But year should contain 4 digits.
+     * The arrival Date time am/pm. Date is of the format mm/dd/yyyy. Time is of the format HH:mm
+     * Month, Date and Hours can be 1 or 2 digits. Year should be 4 digits and
      */
-    private String arrivalDate;
+    private Date arrivalTime;
     /**
-     * The arrival time. Should be of the format HH:mm. Hours can contain 1 or 2 digits. But minutes should contain 2 digits.
-     */
-    private String arrivalTime;
-    /**
-     * Concatenation of departure date and time.
+     *  Departure date time am/pm as a String in the format of {@link DateFormat#SHORT}.
      */
     private String departureString;
     /**
-     * Concatenation of arrival date and time
+     *  Arrival date time am/pm as a String in the format of {@link DateFormat#SHORT}
      */
     private String arrivalString;
 
@@ -127,7 +120,7 @@ public class TextParser implements AirlineParser<Airline> {
                         try {
                             setDateAndTime(departureString, true);
                         } catch (ErroneousDateTimeFormatException iae) {
-                            throw new IllegalFileFormatException("Invalid departure time/date value in the file. " + iae.getMessage());
+                            throw new IllegalFileFormatException("Invalid departure DateTime value in the file. " + iae.getMessage());
                         }
 
                     } else {
@@ -156,7 +149,7 @@ public class TextParser implements AirlineParser<Airline> {
                         throw new IllegalFileFormatException("Format of the file is invalid. Not enough details about flight.");
                     }
 
-                    Flight flight = new Flight(flightNumber, source, destination, departDate, departTime, arrivalDate, arrivalTime);
+                    Flight flight = new Flight(flightNumber, source, destination, departTime, arrivalTime);
                     airline.addFlight(flight);
                 }
             } catch (IOException e) {
@@ -200,24 +193,45 @@ public class TextParser implements AirlineParser<Airline> {
      * @param isDeparture true: if it is departure string, false otherwise.
      */
     private void setDateAndTime(String string, boolean isDeparture) {
-        StringTokenizer st = new StringTokenizer(string, " ");
-        if (st.countTokens() != 2) {
-            throw new IllegalFileFormatException("Format not correct: " + string);
+        SimpleDateFormat simpleDateFormat = getSimpleDateFormatInstance();
+        Date date;
+        try {
+            date = simpleDateFormat.parse(string);
+        } catch (ParseException e) {
+            throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
         }
+        string = simpleDateFormat.format(date);
+
         if (isDeparture) {
-            departDate = st.nextToken();
-            Project1.checkDateFormat(departDate);
-
-            departTime = st.nextToken();
-            Project1.checkTimeFormat(departTime);
+           Project1.checkDateTimeFormat(string);
+            try {
+                departTime = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).parse(string);
+            } catch (ParseException e) {
+                throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
+            }
         } else {
-            arrivalDate = st.nextToken();
-            Project1.checkDateFormat(arrivalDate);
-
-            arrivalTime = st.nextToken();
-            Project1.checkTimeFormat(arrivalTime);
+            Project1.checkDateTimeFormat(string);
+            try {
+                arrivalTime = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).parse(string);
+            } catch (ParseException e) {
+                throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + e + ". Format should be MM/dd/yyyy HH:mm am/pm");
+            }
         }
 
+    }
+
+    /**
+     * Gets the SimpleDateFormat instance of required pattern(MM/dd/yyyy hh:mm aa) with setLenient false.
+     *
+     * @return SimpleDateFormat object
+     */
+    private SimpleDateFormat getSimpleDateFormatInstance() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+        simpleDateFormat.setLenient(false);
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+        dateFormatSymbols.setAmPmStrings(new String[]{"am", "pm"});
+        simpleDateFormat.setDateFormatSymbols(dateFormatSymbols);
+        return simpleDateFormat;
     }
 
     /**
@@ -269,10 +283,10 @@ public class TextParser implements AirlineParser<Airline> {
     /**
      * Retuns a StringTokenizer object used to parse the text file.
      * @param string The string that is to be parsed.
-     * @return A StringTokenizer object with delimiter ||
+     * @return A StringTokenizer object with delimiter |
      */
     private StringTokenizer getStringTokenizer(String string) {
-        return new StringTokenizer(string, "||");
+        return new StringTokenizer(string, "|");
     }
 
     /**

@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Nirdeshika Polisetti
  * @version 1.0
  */
-public class Flight extends AbstractFlight {
+public class Flight extends AbstractFlight implements Comparable<Flight> {
 
     /**
      * Unique identifying number
@@ -44,7 +44,7 @@ public class Flight extends AbstractFlight {
      * @param departTime  Departure time
      * @param arrivalTime Arrival time
      */
-    public Flight(int number, String source, String destination, Date departTime,  Date arrivalTime) {
+    public Flight(int number, String source, String destination, Date departTime, Date arrivalTime) {
         this.number = number;
         this.source = source;
         this.destination = destination;
@@ -79,7 +79,9 @@ public class Flight extends AbstractFlight {
      */
     @Override
     public String getDepartureString() {
-        return DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(departTime);
+        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        dateTimeInstance.setLenient(false);
+        return dateTimeInstance.format(departTime);
     }
 
     /**
@@ -99,7 +101,9 @@ public class Flight extends AbstractFlight {
      */
     @Override
     public String getArrivalString() {
-        return DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(arrivalTime);
+        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        dateTimeInstance.setLenient(false);
+        return dateTimeInstance.format(arrivalTime);
     }
 
     /**
@@ -116,5 +120,33 @@ public class Flight extends AbstractFlight {
     @Override
     public Date getArrival() {
         return arrivalTime;
+    }
+
+    /**
+     * Define our own way of comparing two flight objects. Two flights are said to be equal if they have same source and departure time.
+     *
+     * @param o The object that is to be compared.
+     * @return Returns 0 when both are equal. A negative integer when this object is less than o. A positive integer when this object is greater than o.
+     */
+    @Override
+    public int compareTo(Flight o) {
+        if (this.getSource().compareToIgnoreCase(o.getSource()) > 0) {
+            return 1;
+        }
+
+        if (this.getSource().compareToIgnoreCase(o.getSource()) < 0) {
+            return -1;
+        }
+
+        if (this.getSource().compareToIgnoreCase(o.getSource()) == 0) {
+            if (this.getDeparture().compareTo(o.getDeparture()) < 0) {
+                return -1;
+            }
+            if (this.getDeparture().compareTo(o.getDeparture()) > 0) {
+                return 1;
+            }
+        }
+
+        return 0;
     }
 }
