@@ -93,6 +93,8 @@ public class Project1 {
             System.exit(4);
         } catch (ParseException e) {
             System.out.println("Error in depart time. " + e.getMessage());
+            //todo:
+            System.out.println(e.getStackTrace());
             System.exit(4);
         }
 
