@@ -9,6 +9,7 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -47,11 +48,11 @@ public class TextParser implements AirlineParser<Airline> {
      */
     private Date arrivalTime;
     /**
-     *  Departure date time am/pm as a String in the format of {@link DateFormat#SHORT}.
+     * Departure date time am/pm as a String in the format of {@link DateFormat#SHORT}.
      */
     private String departureString;
     /**
-     *  Arrival date time am/pm as a String in the format of {@link DateFormat#SHORT}
+     * Arrival date time am/pm as a String in the format of {@link DateFormat#SHORT}
      */
     private String arrivalString;
 
@@ -66,6 +67,7 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Creates a TextParser obejct. It takes the file as an argument whose contents are to be read and parsed.
+     *
      * @param fileName The name of the file that is to be read and parsed.
      */
     public TextParser(String fileName) {
@@ -75,6 +77,7 @@ public class TextParser implements AirlineParser<Airline> {
     /**
      * Reads the contents of the file and parses it to create an airline object and flight objects. It also adds flight objects to the airline.
      * It also checks the format of the file and the format and type of the individual members of the flight object.
+     *
      * @return An airline object whose name and flights are read and parsed from the given file.
      * @throws ParserException
      */
@@ -166,6 +169,7 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Gets the name of the airline from the text file.
+     *
      * @return Name of the airline.
      * @throws IllegalFileFormatException If the format of the file does not match with the requirements.
      */
@@ -189,30 +193,24 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Sets the date and time from the string.
-     * @param string The departure/arrival string
+     *
+     * @param string      The departure/arrival string
      * @param isDeparture true: if it is departure string, false otherwise.
      */
     private void setDateAndTime(String string, boolean isDeparture) {
-        SimpleDateFormat simpleDateFormat = getSimpleDateFormatInstance();
-        Date date;
-        try {
-            date = simpleDateFormat.parse(string);
-        } catch (ParseException e) {
-            throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
-        }
-        string = simpleDateFormat.format(date);
+        DateFormat dateFormat = getDateFormatInstance();
 
         if (isDeparture) {
-           Project1.checkDateTimeFormat(string);
+            Project1.checkDateTimeFormat(string);
             try {
-                departTime = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).parse(string);
+                departTime = dateFormat.parse(string);
             } catch (ParseException e) {
                 throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
             }
         } else {
             Project1.checkDateTimeFormat(string);
             try {
-                arrivalTime = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).parse(string);
+                arrivalTime = dateFormat.parse(string);
             } catch (ParseException e) {
                 throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + e + ". Format should be MM/dd/yyyy HH:mm am/pm");
             }
@@ -225,13 +223,10 @@ public class TextParser implements AirlineParser<Airline> {
      *
      * @return SimpleDateFormat object
      */
-    private SimpleDateFormat getSimpleDateFormatInstance() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-        simpleDateFormat.setLenient(false);
-        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
-        dateFormatSymbols.setAmPmStrings(new String[]{"am", "pm"});
-        simpleDateFormat.setDateFormatSymbols(dateFormatSymbols);
-        return simpleDateFormat;
+    private DateFormat getDateFormatInstance() {
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+        dateFormat.setLenient(false);
+        return dateFormat;
     }
 
     /**
@@ -264,6 +259,7 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Gives the BufferedReader object which aids in reading to the text file.
+     *
      * @return BufferedWriter object wrapped around FileReader.
      */
     private BufferedReader getBufferedReader() {
@@ -282,6 +278,7 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Retuns a StringTokenizer object used to parse the text file.
+     *
      * @param string The string that is to be parsed.
      * @return A StringTokenizer object with delimiter |
      */
@@ -291,8 +288,9 @@ public class TextParser implements AirlineParser<Airline> {
 
     /**
      * Checks if the file is in the required format.
+     *
      * @param stringTokenizer StringTokenizer object used to parse the text file/
-     * @param isAirlineName true, if the line corresponds to the Airline name, else false.
+     * @param isAirlineName   true, if the line corresponds to the Airline name, else false.
      */
     private void checkIfItIsInTheCorrectFormat(StringTokenizer stringTokenizer, boolean isAirlineName) {
         if (isAirlineName && stringTokenizer.countTokens() != 1) {
