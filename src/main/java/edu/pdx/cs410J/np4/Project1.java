@@ -94,7 +94,7 @@ public class Project1 {
         } catch (ParseException e) {
             System.out.println("Error in depart time. " + e.getMessage());
             //todo:
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
             System.exit(4);
         }
 
