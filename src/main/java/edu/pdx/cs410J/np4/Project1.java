@@ -86,8 +86,6 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[3 + numberOfOptions]);
-//            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
-//            dateFormat.setLenient(false);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
             simpleDateFormat.setLenient(false);
             departTime = simpleDateFormat.parse(args[3 + numberOfOptions]);
@@ -109,9 +107,9 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[5 + numberOfOptions]);
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
-            dateFormat.setLenient(false);
-            arrivalTime = dateFormat.parse(args[5 + numberOfOptions]);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+            simpleDateFormat.setLenient(false);
+            arrivalTime = simpleDateFormat.parse(args[5 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
             System.out.println("Error in arrival time. " + edte.getMessage());
             System.exit(6);
