@@ -86,7 +86,7 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[3 + numberOfOptions]);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             simpleDateFormat.setLenient(false);
             departTime = simpleDateFormat.parse(args[3 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
