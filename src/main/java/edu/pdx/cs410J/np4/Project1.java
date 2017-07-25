@@ -87,14 +87,15 @@ public class Project1 {
             checkDateTimeFormat(args[3 + numberOfOptions]);
             DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
             dateFormat.setLenient(false);
-            departTime = dateFormat.parse(args[3 + numberOfOptions]);
             //todo:
             System.out.println(dateFormat.parse("1/1/2017 1:09 pm"));
+            departTime = dateFormat.parse(args[3 + numberOfOptions]);
+
         } catch (ErroneousDateTimeFormatException edte) {
             System.out.println("Error in depart time. " + edte.getMessage());
             System.exit(4);
         } catch (ParseException e) {
-            System.out.println("Error in depart time. " + e.getMessage() + departTime);
+            System.out.println("Error in depart time. " + e.getMessage() + args[3 + numberOfOptions]);
             //todo:
             e.printStackTrace();
             System.exit(4);
