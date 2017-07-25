@@ -86,9 +86,9 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[3 + numberOfOptions]);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            simpleDateFormat.setLenient(false);
-            departTime = simpleDateFormat.parse(args[3 + numberOfOptions]);
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            dateFormat.setLenient(false);
+            departTime = dateFormat.parse(args[3 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
             System.out.println("Error in depart time. " + edte.getMessage());
             System.exit(4);
