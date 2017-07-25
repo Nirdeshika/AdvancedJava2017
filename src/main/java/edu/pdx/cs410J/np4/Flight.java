@@ -4,6 +4,7 @@ import edu.pdx.cs410J.AbstractFlight;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * This class represents a concrete flight class. It has a unique identifying number, a source and a destination airport identified by a three-letter code,
@@ -79,7 +80,7 @@ public class Flight extends AbstractFlight implements Comparable<Flight> {
      */
     @Override
     public String getDepartureString() {
-        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
         dateTimeInstance.setLenient(false);
         return dateTimeInstance.format(departTime);
     }
@@ -101,7 +102,7 @@ public class Flight extends AbstractFlight implements Comparable<Flight> {
      */
     @Override
     public String getArrivalString() {
-        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
         dateTimeInstance.setLenient(false);
         return dateTimeInstance.format(arrivalTime);
     }
