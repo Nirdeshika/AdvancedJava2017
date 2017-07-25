@@ -85,7 +85,7 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[3 + numberOfOptions]);
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,Locale.US);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
             dateFormat.setLenient(false);
             departTime = dateFormat.parse(args[3 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
