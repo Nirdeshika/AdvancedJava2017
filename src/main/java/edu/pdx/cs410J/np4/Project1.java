@@ -5,7 +5,6 @@ import edu.pdx.cs410J.AirportNames;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -86,7 +85,7 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[3 + numberOfOptions]);
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
             dateFormat.setLenient(false);
             departTime = dateFormat.parse(args[3 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
@@ -107,7 +106,7 @@ public class Project1 {
 
         try {
             checkDateTimeFormat(args[5 + numberOfOptions]);
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
             dateFormat.setLenient(false);
             arrivalTime = dateFormat.parse(args[5 + numberOfOptions]);
         } catch (ErroneousDateTimeFormatException edte) {
