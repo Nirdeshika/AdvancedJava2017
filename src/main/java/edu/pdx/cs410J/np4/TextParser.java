@@ -199,16 +199,28 @@ public class TextParser implements AirlineParser<Airline> {
      */
     private void setDateAndTime(String string, boolean isDeparture) {
         DateFormat dateFormat = getDateFormatInstance();
+        Date date;
+        try {
+            date = dateFormat.parse(string);
+        } catch (ParseException e) {
+            throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
+        }
+        SimpleDateFormat simpleDateFormatForDate = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat simpleDateFormatForTime = new SimpleDateFormat("hh:mm aa");
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+        dateFormatSymbols.setAmPmStrings(new String[]{"am", "pm"});
+        simpleDateFormatForTime.setDateFormatSymbols(dateFormatSymbols);
+
+        Project1.checkDateFormat(simpleDateFormatForDate.format(date));
+        Project1.checkTimeFormat(simpleDateFormatForTime.format(date));
 
         if (isDeparture) {
-            Project1.checkDateTimeFormat(string);
             try {
                 departTime = dateFormat.parse(string);
             } catch (ParseException e) {
                 throw new ErroneousDateTimeFormatException("Invalid DateTime format: " + string + ". Format should be MM/dd/yyyy HH:mm am/pm");
             }
         } else {
-            Project1.checkDateTimeFormat(string);
             try {
                 arrivalTime = dateFormat.parse(string);
             } catch (ParseException e) {
@@ -219,7 +231,7 @@ public class TextParser implements AirlineParser<Airline> {
     }
 
     /**
-     * Gets the SimpleDateFormat instance of required pattern(MM/dd/yyyy hh:mm aa) with setLenient false.
+     * Gets the DateFormat instance with setLenient false.
      *
      * @return SimpleDateFormat object
      */
