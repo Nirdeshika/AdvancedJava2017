@@ -48,6 +48,9 @@ public class Project2 {
                     System.exit(11);
                 }
             }
+        } else if (project1.getNameOfTheFileFromCommandLineForPrettyPrint != null) {
+            PrettyPrinter prettyPrinter = new PrettyPrinter(project1.getNameOfTheFileFromCommandLineForPrettyPrint);
+            prettyPrinter.dump(project1.airline);
         }
     }
 }
