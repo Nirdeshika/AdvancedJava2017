@@ -25,8 +25,8 @@ public class Project2 {
                 File file = new File(project1.nameOfTheFileFromCommandLine);
 
                 if (file.exists() && !file.isDirectory()) {
-                    project1.checkIfAirlineNameInTextFileIsSameAsTheOneGivenInTheCommandLine();
                     new TextParser(project1.nameOfTheFileFromCommandLine).parse();
+                    project1.checkIfAirlineNameInTextFileIsSameAsTheOneGivenInTheCommandLine();
                 }
             } catch (AirlineNameMismatchException anme) {
                 System.out.println(anme.getMessage());
