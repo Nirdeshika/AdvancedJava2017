@@ -85,8 +85,8 @@ public class PrettyPrinter implements AirlineDumper<Airline> {
 
             prettyPrintContent += "Name of the airline: " + airline.getName() + "\n";
             for (Flight flight : flights) {
-                prettyPrintContent += "Flight number " + flight.getNumber() + " starting from " + flight.getSource().toUpperCase() + "(" + AirportNames.getName(flight.getSource()) + ")" +
-                        " on " + simpleDateFormat.format(flight.getDeparture()) + " reaches " + flight.getDestination().toUpperCase() + "(" + AirportNames.getName(flight.getDestination()) + ")" +
+                prettyPrintContent += "Flight number " + flight.getNumber() + " starting from " + flight.getSource().toUpperCase() + "(" + AirportNames.getName(flight.getSource().toUpperCase()) + ")" +
+                        " on " + simpleDateFormat.format(flight.getDeparture()) + " reaches " + flight.getDestination().toUpperCase() + "(" + AirportNames.getName(flight.getDestination().toUpperCase()) + ")" +
                         " on " + simpleDateFormat.format(flight.getArrival()) + ".";
                 prettyPrintContent += "The duration of this flight is " + calculateDuration(flight.getDeparture(), flight.getArrival()) + " minutes.\n";
             }
