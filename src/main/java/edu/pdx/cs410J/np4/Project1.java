@@ -85,10 +85,11 @@ public class Project1 {
         }
 
         try {
-            checkDateTimeFormat(args[3 + numberOfOptions]);
+            String departDateTimeAMPM = args[3 + numberOfOptions] + " " + args[4 + numberOfOptions] + " " + args[5 + numberOfOptions];
+            checkDateTimeFormat(departDateTimeAMPM);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
             simpleDateFormat.setLenient(false);
-            departTime = simpleDateFormat.parse(args[3 + numberOfOptions]);
+            departTime = simpleDateFormat.parse(departDateTimeAMPM);
         } catch (ErroneousDateTimeFormatException edte) {
             System.out.println("Error in depart time. " + edte.getMessage());
             System.exit(4);
@@ -98,18 +99,19 @@ public class Project1 {
         }
 
         try {
-            checkAirportCodeFormat(args[4 + numberOfOptions]);
-            destination = args[4 + numberOfOptions];
+            checkAirportCodeFormat(args[6 + numberOfOptions]);
+            destination = args[6 + numberOfOptions];
         } catch (IllegalAirportCodeException iace) {
             System.out.println("Invalid destination. " + iace.getMessage());
             System.exit(5);
         }
 
         try {
-            checkDateTimeFormat(args[5 + numberOfOptions]);
+            String arrivalDateTimeAMPM = args[7 + numberOfOptions] + " " + args[8 + numberOfOptions] + " " + args[9 + numberOfOptions];
+            checkDateTimeFormat(arrivalDateTimeAMPM);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
             simpleDateFormat.setLenient(false);
-            arrivalTime = simpleDateFormat.parse(args[5 + numberOfOptions]);
+            arrivalTime = simpleDateFormat.parse(arrivalDateTimeAMPM);
         } catch (ErroneousDateTimeFormatException edte) {
             System.out.println("Error in arrival time. " + edte.getMessage());
             System.exit(6);
@@ -336,9 +338,9 @@ public class Project1 {
      * @throws ErroneousNumberOfArgumentsException
      */
     private static void checkNumberOfArguments(int countOfArgs, int numberOfOptions) {
-        if (countOfArgs - numberOfOptions < 6)
+        if (countOfArgs - numberOfOptions < 10)
             throw new ErroneousNumberOfArgumentsException("Please Check! Some of the arguments are missing.");
-        if (countOfArgs - numberOfOptions > 6)
+        if (countOfArgs - numberOfOptions > 10)
             throw new ErroneousNumberOfArgumentsException("Please Check! There are some extra arguments.");
     }
 
